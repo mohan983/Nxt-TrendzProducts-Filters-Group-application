@@ -87,37 +87,35 @@ class AllProductsSection extends Component {
     const jwtToken = Cookies.get('jwt_token')
 
     // TODO: Update the code to get products with filters applied
-    try {
-      const {
-        activeOptionId,
-        activeCategoryId,
-        activeRatingId,
-        searchInput,
-      } = this.state
-      const apiUrl = `https://apis.ccbp.in/products?sort_by=${activeOptionId}&category=${activeCategoryId}&title_search=${searchInput}&rating=${activeRatingId}`
-      const options = {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
-        },
-        method: 'GET',
-      }
-      const response = await fetch(apiUrl, options)
-      if (response.ok) {
-        const fetchedData = await response.json()
-        const updatedData = fetchedData.products.map(product => ({
-          title: product.title,
-          brand: product.brand,
-          price: product.price,
-          id: product.id,
-          imageUrl: product.image_url,
-          rating: product.rating,
-        }))
-        this.setState({
-          productsList: updatedData,
-          isLoading: false,
-        })
-      }
-    } catch (e) {
+    const {
+      activeOptionId,
+      activeCategoryId,
+      activeRatingId,
+      searchInput,
+    } = this.state
+    const apiUrl = `https://apis.ccbp.in/products?sort_by=${activeOptionId}&category=${activeCategoryId}&title_search=${searchInput}&rating=${activeRatingId}`
+    const options = {
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+      },
+      method: 'GET',
+    }
+    const response = await fetch(apiUrl, options)
+    if (response.ok) {
+      const fetchedData = await response.json()
+      const updatedData = fetchedData.products.map(product => ({
+        title: product.title,
+        brand: product.brand,
+        price: product.price,
+        id: product.id,
+        imageUrl: product.image_url,
+        rating: product.rating,
+      }))
+      this.setState({
+        productsList: updatedData,
+        isLoading: false,
+      })
+    } else {
       this.failureDetails()
     }
   }
